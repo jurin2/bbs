@@ -66,12 +66,6 @@ img{
     margin:0 auto; 
     padding:36px 16px;           
 }
-.main-sec .contents{
-    margin:0 auto;
-    border-radius:10px;
-    padding:36px;
-    background-color:#c0c0c0;
-}
 .sec-tit{
     margin-bottom:32px;
     font-weight:700;
@@ -79,38 +73,47 @@ img{
     color:#333;
     text-align:center;
 }
-.sec form>div{
-    margin-bottom:16px;
+.table{
+    margin-bottom:24px;
+    border-top:2px solid #333;
+    border-bottom:2px solid #333;
 }
-.sec form>div.g-btn{
-    margin:0;
+.n-tit,.n-content{
+    padding:20px 0;
 }
-.sec input{
-    display:inline-block;
+.n-tit{
+    border-bottom:1px solid #333;
+}
+#noticeTit,#noticeContent{
     width:100%;
-    padding: 6px 10px;
-    font-weight: 500;
-    font-size: 20px;
-    color: #333;
-}
-.sec input::placeholder{
-    color: #333;
-}
+    padding:16px;
+    font-size:20px;
+} 
+#noticeTit{
+    font-weight:700;
+    border:none;
+}  
+#noticeContent{
+    height:300px;
+    border:none;
+}  
 .g-btn{
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
-.g-btn input{
-    width: calc(50% - 8px);
+button{
+    margin-left: 16px;
+    float:right;
     border: none;
-    color: #fff;
+    padding:8px;
+    background-color:darkred;
+    font-weight:500;
+    font-size:20px;
+    color:#fff;
 }
-input[type="submit"]{
+button:first-child{
     background-color: darkblue;
-}
-input[type="reset"]{
-    background-color: darkred;
 }
 
 .footer{
@@ -123,30 +126,4 @@ address{
     font-size: 24px;
     color: #fff;
     text-align: center;
-}
-
-@media (min-width:640px){
-    .main-sec .contents{
-        width: 560px;
-    }
-}
-@media (min-width:768px){
-    .main-sec .contents{
-        width: 640px;
-    }
-}
-@media (min-width:960px){
-    .main-sec .contents{
-        width: 840px;
-    }
-}
-@media (min-width:1200px){
-    .main-sec .contents{
-        width: 1180px;
-    }
-}
-@media (min-width:1680px){
-    .main-sec .contents{
-        width: 100%;
-    }
 }

@@ -96,6 +96,17 @@ img{
 .sec input::placeholder{
     color: #333;
 }
+.u-gender{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+}
+.u-gender label:first-child{
+    margin-right: 30px;
+}
+.u-gender input{
+    width: auto;
+}
 .g-btn{
     display: flex;
     flex-flow: row nowrap;
@@ -111,6 +122,18 @@ input[type="submit"]{
 }
 input[type="reset"]{
     background-color: darkred;
+}
+
+.not-null{
+    position: relative;
+}
+.not-null::after{
+    content: '*';
+    display: block;
+    color: #f00;
+    position: absolute;
+    left: 5px;
+    top: 5px;
 }
 
 .footer{

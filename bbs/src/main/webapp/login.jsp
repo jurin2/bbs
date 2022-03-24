@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ page import="java.io.PrintWriter" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -12,6 +13,18 @@
 
 </head>
 <body>
+	<%
+		PrintWriter script = response.getWriter();
+	
+		if(session.getAttribute("userID") != null){	
+			script.println("<script>");
+			script.println("alert('잘못된 접근입니다. 메인페이지로 돌아갑니다.')");
+			script.println("location.href='./main.jsp';");
+			script.println("</script>");	
+		}
+	%>
+
+
     <div class="wrap">
         <header class="header">
             <div class="container">

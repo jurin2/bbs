@@ -26,7 +26,7 @@ public class UserDAO {
 		}
 	}
 	
-	
+	// 로그인 관련 메서드
 	public int login(String userID, String userPassword) {
 		String SQL = "SELECT userPassword FROM user WHERE userID=?";
 		try {
@@ -46,6 +46,29 @@ public class UserDAO {
 				// 아이디가 존재하지 않는 영역
 				return -1;
 			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return -3;
+	}
+	
+	// 회원가입 관련 메서드
+	public int join(String userID, String userPassword, String userName, String userAddress, String userBirthday, String userGender, String userEmail, String userPhone) {
+		String SQL = "INSERT INTO user VALUES(?,?,?,?,?,?,?,?);";
+		try {
+			pstmt=conn.prepareStatement(SQL);
+			pstmt.setString(1, userID);
+			pstmt.setString(2, userPassword);
+			pstmt.setString(3, userName);
+			pstmt.setString(4, userAddress);
+			pstmt.setString(5, userBirthday);
+			pstmt.setString(6, userGender);
+			pstmt.setString(7, userEmail);
+			pstmt.setString(8, userPhone);
+			
+			return pstmt.executeUpdate();
 			
 		}catch(Exception e){
 			e.printStackTrace();
