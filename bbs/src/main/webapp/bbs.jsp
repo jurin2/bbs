@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="bbs.BbsDAO" %><!-- 사용자 라이브러리 -->
+<%@ page import="bbs.Bbs" %><!-- 사용자 라이브러리 -->
+<%@ page import="java.io.PrintWriter" %> <!-- 자바에서 자바스크립트 사용 -->
+<%@ page import="java.util.ArrayList" %>
+
+<% request.setCharacterEncoding("utf-8"); %><!-- 넘어온 한글자료 깨지지 않도록 -->    
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,13 +15,21 @@
 
 </head>
 <body>
+
 	<%
 		//로그인상태 확인
 		String userID = null;
 		if(session.getAttribute("userID") != null){
 			userID=(String)session.getAttribute("userID");
 		}
+		
+		int pageNumber=1;
+		// 페이지 번호
+		if(request.getParameter("pageNumber") != null){
+			pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+		}
 	%>
+	
 	<section class="wrap">
 		<!-- 공통 영역  -->
 		<header>
@@ -40,6 +54,7 @@
 							<a href="#" class="dropdown-toggle"
 								data-toggle="dropdown" role="button" aria-haspopup="true"
 								aria-expanded="false">접속하기<span class="caret"></span></a>
+								
 							<%
 							if(userID == null){
 							%>	
@@ -61,23 +76,46 @@
 	
 		<!-- 페이지별 컨텐츠 영역 시작 -->
 		<section>
-			<!-- 로그인 양식 -->
 			<div class="container">
-				<div class="col-lg-12">
-					<div class="jumbotron" style="margin-top:20px;padding-top:30px">
-						<form method="post" action="./writeAction.jsp">
-							<h2 style="text-align:center">글쓰기 양식</h2>		
-							<div class="form-group">
-								<input type="text" placeholder="제목" class="form-control" name="bbsTitle">
-							</div>
-							<div class="form-group">
-								<input type="text" placeholder="글내용" class="form-control" name="bbsContent">
-							</div>
-							<input type="submit" value="글저장" class="btn btn-primary form-control">
-						</form>
-					</div>
-				</div>
+				<table>
+					<thead>
+						<tr>
+							<th style="width:10%;background-color:#aaa;text-align:center;font-size:18px;">문서번호</th>
+							<th style="width:60%;background-color:#aaa;text-align:center;font-size:18px;">제목</th>
+							<th style="width:15%;background-color:#aaa;text-align:center;font-size:18px;">작성자</th>
+							<th style="width:15%;background-color:#aaa;text-align:center;font-size:18px;">작성일</th>							
+						</tr>	
+					</thead>
+					<tbody>
+					<%
+						BbsDAO bbsDAO = new BbsDAO();
+						ArrayList<Bbs> list = bbsDAO.getList(pageNumber);
+						for(int idx=0; idx<list.size(); idx++){
+					%>
+						<tr>
+							<td><%= list.get(idx).getBbsID() %></td>
+							<td><%= list.get(idx).getBbsTitle() %></td>
+							<td><%= list.get(idx).getUserID() %></td>
+							<td><%= list.get(idx).getBbsDate() %></td>							
+						</tr>
+					<%
+						}
+					%>
+					</tbody>					
+				</table>
+				<%
+					if(pageNumber>1){
+				%>
+				<a href="bbs.jsp?pageNumber=<%= pageNumber - 1 %>" class="btn btn-success">이전</a>
+				<%} %>
+				<%
+					if(bbsDAO.nextPage(pageNumber+1)){
+				%>
+				<a href="bbs.jsp?pageNumber=<%= pageNumber + 1 %>" class="btn btn-success">다음</a>
+				<%} %>
+				<a href="./write.jsp" class="btn btn-success">글쓰기</a>
 			</div>
+			
 		</section>
 		
 	</section>

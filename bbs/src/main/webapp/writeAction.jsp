@@ -1,46 +1,68 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
-<%@ page import="notice.NoticeDAO"%>
-<%@ page import="java.io.PrintWriter" %>
-<% request.setCharacterEncoding("utf-8"); %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="bbs.BbsDAO" %><!-- 사용자 라이브러리 -->
+<%@ page import="java.io.PrintWriter" %> <!-- 자바에서 자바스크립트 사용 -->
+<% request.setCharacterEncoding("utf-8"); %><!-- 넘어온 한글자료 깨지지 않도록 -->
 
-<jsp:useBean id="notice" class="notice.Notice" scope="page"/>
-<jsp:setProperty name="notice" property="noticeTit"/>
-<jsp:setProperty name="notice" property="noticeContent"/>
 
-   
+<!-- class를 자바빈즈 사용함, 이름 id설정한 이름 -->
+<jsp:useBean id="bbs" class="bbs.Bbs" scope="page" />
+<!-- write 페이지에서 받아온 bbsTitle Bbs.bbsTitle에 저장 -->
+<jsp:setProperty name="bbs" property="bbsTitle" />
+<!-- write 페이지에서 받아온 bbsContent Bbs.bbsContent에 저장 -->
+<jsp:setProperty name="bbs" property="bbsContent" />
+
+    
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Insert title here</title>
+<meta charset="UTF-8">
+<title>로그인</title>
 </head>
 <body>
 	<%
 		PrintWriter script = response.getWriter();
+		
+		//로그인상태 확인
 		String userID = null;
 		if(session.getAttribute("userID") != null){
 			userID=(String)session.getAttribute("userID");
 		}
-	
-		NoticeDAO noticeDAO = new NoticeDAO();
-		int result = noticeDAO.write(notice.getNoticeTit(),userID,notice.getNoticeContent());			
-		if(result == -3){
-			//데이터베이스 오류
+		
+		//로그인중일때 로그인방지
+		if(userID == null){
 			script.println("<script>");
-			script.println("alert('데이터베이스 오류')");
-			script.println("location.href='./main.jsp'");
+			script.println("alert('로그인후 작성 가능합니다. 로그인페이지로 이동합니다.')");
+			script.println("location.href='./login.jsp'");
 			script.println("</script>");
 		}else{
-			//게시판 작성 성공
-			script.println("<script>");
-			script.println("alert('게시판 작성이 완료되었습니다.')");
-			script.println("location.href='./notice.jsp'");
-			script.println("</script>");
-		}			
+		
+	
+			//입력자료 확인
+			if(bbs.getBbsTitle() == null || bbs.getBbsContent() == null){
+				script.println("<script>");
+				script.println("alert('문서 내용을 확인하세요')");
+				script.println("history.back()");
+				script.println("</script>");
+			}else{
+		
+				BbsDAO bbsDAO = new BbsDAO();
+				
+				int result = bbsDAO.write(bbs.getBbsTitle(),userID,bbs.getBbsContent());
+				script.println("<script>");
+				
+				if(result == -1){
+					script.println("alert('기록실패')");
+					script.println("location.href='./main.jsp'");
+				}else{				
+					script.println("alert('기록성공')");
+					script.println("location.href='./bbs.jsp'");
+				}
+				
+				script.println("</script>");
+			}
+		}
 		
 	%>
-
-	
 </body>
 </html>

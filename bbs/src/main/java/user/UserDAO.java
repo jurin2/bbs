@@ -9,73 +9,62 @@ public class UserDAO {
 	
 	private Connection conn;
 	private PreparedStatement pstmt;
-	private ResultSet rs;
-
+	private ResultSet rs; 
 	
-	// ë°ì´í„°ë² ì´ìŠ¤ ì ‘ê·¼ê°œì²´
+	/* DBÁ¢±Ù */
 	public UserDAO() {
 		try {
-			String dbURL = "jdbc:mysql://localhost:3306/bbs";
-			String dbID = "root";
-			String dbPassword = "root";
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
-			
-		}catch(Exception e){
+			String dbURL = "jdbc:mysql://localhost:3306/bbs"; //mysql À§Ä¡
+			String dbID="root"; // mysql ID
+			String dbPassword="root"; // mysql Password
+			Class.forName("com.mysql.cj.jdbc.Driver"); // Á¢¼Ó µå¶óÀÌ¹ö
+			conn = DriverManager.getConnection(dbURL, dbID, dbPassword); // DB¿¬°áÁ¤º¸
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	// ë¡œê·¸ì¸ ê´€ë ¨ ë©”ì„œë“œ
+	
+	/* ·Î±×ÀÎ */
 	public int login(String userID, String userPassword) {
 		String SQL = "SELECT userPassword FROM user WHERE userID=?";
 		try {
-			pstmt=conn.prepareStatement(SQL);
+			pstmt=conn.prepareStatement(SQL); // DB¿¡¼­ SQL½ÇÇàÁØºñ
 			pstmt.setString(1, userID);
 			rs=pstmt.executeQuery();
 			if(rs.next()) {
-				// í•´ë‹¹ ì•„ì´ë””ê°€ ì¡´ì¬í•˜ëŠ” ì˜ì—­
 				if(rs.getString(1).equals(userPassword)) {
-					// ë¡œê·¸ì¸ ì„±ê³µ
 					return 1;
 				}else {
-					// íŒ¨ìŠ¤ì›Œë“œ ë¶ˆì¼ì¹˜
-					return -2;
+					return -1;
 				}
 			}else {
-				// ì•„ì´ë””ê°€ ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ì˜ì—­
-				return -1;
+				return -2;
 			}
-			
-		}catch(Exception e){
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
 		return -3;
 	}
 	
-	// íšŒì›ê°€ì… ê´€ë ¨ ë©”ì„œë“œ
-	public int join(String userID, String userPassword, String userName, String userAddress, String userBirthday, String userGender, String userEmail, String userPhone) {
-		String SQL = "INSERT INTO user VALUES(?,?,?,?,?,?,?,?);";
+	/* È¸¿ø°¡ÀÔ */
+	public int join(String userID, String userPassword, String userName, String userGender, String userEmail) {
+		String SQL = "INSERT INTO user VALUES(?,?,?,?,?)";
 		try {
-			pstmt=conn.prepareStatement(SQL);
+			pstmt=conn.prepareStatement(SQL); // DB¿¡¼­ SQL½ÇÇàÁØºñ
 			pstmt.setString(1, userID);
 			pstmt.setString(2, userPassword);
 			pstmt.setString(3, userName);
-			pstmt.setString(4, userAddress);
-			pstmt.setString(5, userBirthday);
-			pstmt.setString(6, userGender);
-			pstmt.setString(7, userEmail);
-			pstmt.setString(8, userPhone);
+			pstmt.setString(4, userGender);
+			pstmt.setString(5, userEmail);
 			
-			return pstmt.executeUpdate();
+			return pstmt.executeUpdate(); // executeUpdate : º¯°æ, executeQuery : ¼±ÅÃ
 			
-		}catch(Exception e){
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
 		return -3;
 	}
 	
-		
+	
 }
